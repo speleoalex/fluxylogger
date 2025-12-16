@@ -17,7 +17,7 @@
 
 */
 
-#define VERSION 2.45
+#define VERSION 2.46
 
 #define BOUDRATE 19200  // 9600,57600,19200,115200
 // Sensor presence configuration
@@ -1034,8 +1034,15 @@ int CONF_getConfValueInt(char *filename, char *key, int defaultValue = 0) {
 }
 
 bool CreateINIConf(int NewInterval_s, int NewzeroGasValue = 0) {
-  SD.remove(CONF_FILE);
-  settingFile = SD.open(CONF_FILE, FILE_WRITE);
+  // Remove existing file first
+  if (SD.exists(CONF_FILE)) {
+    if (!SD.remove(CONF_FILE)) {
+      SerialPrintln(F("remove failed"));
+      return false;
+    }
+  }
+  // Open file with O_WRITE | O_CREAT | O_TRUNC to ensure overwrite
+  settingFile = SD.open(CONF_FILE, O_WRITE | O_CREAT | O_TRUNC);
   SerialPrint(F("create "));
   SerialPrintln(CONF_FILE);
   if (settingFile) {
@@ -1047,10 +1054,17 @@ bool CreateINIConf(int NewInterval_s, int NewzeroGasValue = 0) {
     settingFile.println(NewzeroGasValue);
 #endif
     settingFile.flush();
+    settingFile.sync();  // Force write to SD card
     settingFile.close();
     // create new file config.ini------<
+    // Verify file was written
+    SerialPrint(F("interval="));
+    SerialPrint(NewInterval_s);
+    SerialPrint(F(" zerogas="));
+    SerialPrintln(NewzeroGasValue);
     printResult(true, true);
   } else {
+    SerialPrintln(F("open failed"));
     printResult(false, true);
     return false;
   }
