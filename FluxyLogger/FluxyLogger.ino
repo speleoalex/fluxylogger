@@ -2,7 +2,7 @@
    FluxyLogger Datalogger - OpenSpeleo Project
    Author: Alessandro Vernassa (speleoalex@gmail.com)
    Copyright: 2021
-   License: GNU General Public License
+   License: GNU General Public License v3.0 + Commons Clause
    Product link: https://techmakers.eu/
 
    This sketch is designed for the N.A.S.O. datalogger, available as a pre-assembled unit or kit.

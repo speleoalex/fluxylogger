@@ -112,7 +112,7 @@ If you find this project useful, consider supporting its development:
 
 ## 📜 License & Credits
 
-- **License**: GNU General Public License
+- **License**: GNU General Public License v3.0 + [Commons Clause](https://commonsclause.com/) (see [LICENSE](LICENSE))
 - **Author**: Alessandro Vernassa (speleoalex@gmail.com)
 - **Website**: <https://techmakers.it/un-naso-per-gli-speleologi.html/>
 - **Firmware Version**: 2.45
