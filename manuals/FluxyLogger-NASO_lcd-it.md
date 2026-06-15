@@ -10,7 +10,7 @@ Il tracciante viene immesso in un ingresso aspirante e il datalogger in un ingre
 
 Il datalogger registra il passaggio del tracciante e salva i dati acquisiti su una scheda nicroSD
 
-[https://techmakers.eu/products/n-a-s-o-data-logger](https://techmakers.eu/products/n-a-s-o-data-logger)
+[https://www.sparkilla.com/ecommerce_fluxylogger/](https://www.sparkilla.com/ecommerce_fluxylogger/)
 
 
 Gruppo Telegram

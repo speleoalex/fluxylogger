@@ -24,7 +24,7 @@ FluxyLogger can be configured for different applications:
 
 **Note**: METEO and VOC firmware support is complete (v2.45) but requires enabling sensors in code - see assembly guides for details.
 
-**Purchase**: Assembled NASO units available at [TechMakers](https://techmakers.eu/products/new-cave-monitoring-n-a-s-o-datalogger-for-atmospheric-tracer-tracking-assembled)
+**Purchase**: Assembled NASO units available at [Sparkilla](https://www.sparkilla.com/ecommerce_fluxylogger/)
 
 ## 🔧 Base Components
 
@@ -114,7 +114,7 @@ If you find this project useful, consider supporting its development:
 
 - **License**: GNU General Public License v3.0 + [Commons Clause](https://commonsclause.com/) (see [LICENSE](LICENSE))
 - **Author**: Alessandro Vernassa (speleoalex@gmail.com)
-- **Website**: <https://techmakers.it/un-naso-per-gli-speleologi.html/>
+- **Website**: <https://www.sparkilla.com/ecommerce_fluxylogger/>
 - **Firmware Version**: 2.45
 - **Started**: 2020
 

@@ -48,7 +48,7 @@ Detects tracer gases (butane/propane) to study air flows in caves.
 ```
 
 **Documentation**: [IT](manuals/FluxyLogger-NASO-it.md) | [EN](manuals/FluxyLogger-NASO-en.md)
-**Purchase**: [Assembled kit](https://techmakers.eu/products/new-cave-monitoring-n-a-s-o-datalogger-for-atmospheric-tracer-tracking-assembled)
+**Purchase**: [Assembled kit](https://www.sparkilla.com/ecommerce_fluxylogger/)
 
 ---
 

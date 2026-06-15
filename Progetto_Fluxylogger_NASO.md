@@ -21,14 +21,9 @@ Con il NASO è possibile utilizzare come traccianti il butano o il propano conte
 
 - Durante il 2024 sono stati effettuati miglioramenti al datalogger ed è stata acquisita esperienza utilizzando diversi sensori e traccianti, ottimizzando il consumo delle batterie e migliorando i software di acquisizione. Altri speleologi hanno contribuito al miglioramento del software di acquisizione dei dati.
 
-- Nel novembre 2024 è previsto all'Incontro Internazionale di Speleologia Syphonia2024 un incontro per fare il punto sui risultati ottenuti insieme ai gruppi che lo hanno sperimentato.
+- Nel novembre 2024, all'Incontro Internazionale di Speleologia Syphonia2024, si è tenuto un incontro per fare il punto sui risultati ottenuti insieme ai gruppi che lo hanno sperimentato.
 
-- Nel 2024 è stato creato un assistente virtuale basato su intelligenza artificiale che analizza i files di log, da aiuti sulla costruzione del datalogger (https://www.sparkilla.com/prompt/NASO4CAVE)
-
-Riassunto: Il progetto Fluxylogger NASO è stato avviato nel 2020 per tracciare i flussi d’aria nelle grotte in modo economico e accessibile. Utilizzando butano o propano come traccianti, il progetto è open source per favorire contributi esterni. Dal 2020 al 2024, il NASO è stato testato e migliorato, portando alla scoperta di collegamenti tra grotte e a una notevole ottimizzazione del dispositivo. È stato presentato in diversi incontri internazionali di speleologia per condividere i risultati e pianificare ulteriori sviluppi.
-
-
-
+- Nel 2024 è stato creato un assistente virtuale basato su intelligenza artificiale che analizza i file di log e dà aiuti sulla costruzione del datalogger (https://www.sparkilla.com/application/NASO4CAVE)
 
 
 

@@ -565,8 +565,8 @@
             return urlParams.get(name);
         }
         function goToManager() {
-            if (getParam('popup') === '1') {
-                window.close();
+            if (getParam('popup') === '1' && window.opener) {
+                window.opener.focus();
             } else {
                 window.location.href = 'loggermanager.htm';
             }

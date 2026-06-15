@@ -48,7 +48,7 @@ Rileva gas traccianti (butano/propano) per studiare flussi d'aria in grotte.
 ```
 
 **Documentazione**: [IT](manuals/FluxyLogger-NASO-it.md) | [EN](manuals/FluxyLogger-NASO-en.md)
-**Acquisto**: [Kit assemblato](https://techmakers.eu/products/new-cave-monitoring-n-a-s-o-datalogger-for-atmospheric-tracer-tracking-assembled)
+**Acquisto**: [Kit assemblato](https://www.sparkilla.com/ecommerce_fluxylogger/)
 
 ---
 

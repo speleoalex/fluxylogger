@@ -1122,9 +1122,14 @@
                 document.getElementById('output').innerHTML += '\n<span class="log">' + log + val + '</span>\n';
             }
         }
+        var viewerWindow = null;
         function openViewerHtml() {
             if (commManager.isConnected) {
-                window.open("loggerviewer.htm?popup=1");
+                if (viewerWindow && !viewerWindow.closed) {
+                    viewerWindow.focus();
+                } else {
+                    viewerWindow = window.open("loggerviewer.htm?popup=1", "loggerviewer");
+                }
             } else {
                 window.location = "loggerviewer.htm";
             }

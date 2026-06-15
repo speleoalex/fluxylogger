@@ -1,6 +1,6 @@
 # Assembled version:
 
-Assembled version available here: https://techmakers.eu/collections/data-loggers
+Assembled version available here: https://www.sparkilla.com/ecommerce_fluxylogger/
 
 
 # Components required for assembly:
@@ -21,7 +21,7 @@ https://www.amazon.it/EnergyCell-5000mAh-Mini-Caricatore-Portatile-Samsung-Nero/
 
 # Kit version:
 
-Kit available here: https://techmakers.eu/collections/data-loggers
+Kit available here: https://www.sparkilla.com/ecommerce_fluxylogger/
 
 
 # Optional:

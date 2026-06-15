@@ -8,7 +8,7 @@ The tracer is introduced into a suction inlet and the datalogger in a blowing in
 
 The datalogger records the passage of the tracer and saves the acquired data on a microSD card.
 
-[https://techmakers.eu/products/n-a-s-o-data-logger](https://techmakers.eu/products/n-a-s-o-data-logger)
+[https://www.sparkilla.com/ecommerce_fluxylogger/](https://www.sparkilla.com/ecommerce_fluxylogger/)
 
 ## Support the Project
 
