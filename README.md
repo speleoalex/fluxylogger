@@ -1,5 +1,6 @@
 # FluxyLogger
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22255817.svg)](https://doi.org/10.5281/zenodo.22255817)
 ![FluxyLogger](Naso.png)
 
 **FluxyLogger** is an open source modular datalogger platform based on Arduino UNO for environmental monitoring, originally developed for cave air tracing studies.
@@ -110,12 +111,24 @@ If you find this project useful, consider supporting its development:
 
 [![Donate with PayPal](paypal.png)](https://www.paypal.com/donate/?business=TKQWLKGENEP7L&no_recurring=0&item_name=Progetto+FluxyLogger+NASO&currency_code=EUR)
 
+## 📚 How to Cite
+
+If you use FluxyLogger in your research, please cite it via its Zenodo DOI:
+
+> Vernassa, A. (2026). *FluxyLogger: open-source modular Arduino datalogger for environmental monitoring and cave air tracing* (v2.46). Zenodo. <https://doi.org/10.5281/zenodo.22255818>
+
+- **Concept DOI** (always resolves to the latest version): [10.5281/zenodo.22255817](https://doi.org/10.5281/zenodo.22255817)
+- **Version DOI** (v2.46): [10.5281/zenodo.22255818](https://doi.org/10.5281/zenodo.22255818)
+
+Citation metadata is also available in [CITATION.cff](CITATION.cff) (use the "Cite this repository" button on GitHub).
+
 ## 📜 License & Credits
 
 - **License**: GNU General Public License v3.0 + [Commons Clause](https://commonsclause.com/) (see [LICENSE](LICENSE))
 - **Author**: Alessandro Vernassa (speleoalex@gmail.com)
 - **Website**: <https://www.sparkilla.com/ecommerce_fluxylogger/>
-- **Firmware Version**: 2.45
+- **Firmware Version**: 2.46
+- **DOI**: [10.5281/zenodo.22255817](https://doi.org/10.5281/zenodo.22255817)
 - **Started**: 2020
 
 ---
