@@ -1,0 +1,35 @@
+{
+  "title": "FluxyLogger: open-source modular Arduino datalogger for environmental monitoring and cave air tracing",
+  "upload_type": "software",
+  "access_right": "open",
+  "license": "other-nc",
+  "language": "eng",
+  "creators": [
+    {
+      "name": "Vernassa, Alessandro"
+    }
+  ],
+  "description": "<p><strong>FluxyLogger</strong> is an open-source modular datalogger platform based on Arduino UNO for environmental monitoring, originally developed for cave air tracing studies (speleology).</p><p>The same firmware supports several hardware configurations: <strong>NASO</strong> (MQ-2 gas sensor for air tracing and gas detection), <strong>NASO+LCD</strong> (with a 16x2 I2C display), <strong>METEO</strong> (BMP280 pressure/temperature sensor and anemometer) and <strong>VOC</strong> (SGP40/SGP30 air quality sensors). Data are logged as CSV files on a microSD card with RTC timestamps, and the device is configured through a USB serial console.</p><p>The repository contains the Arduino firmware, wiring schematics, assembly guides and user manuals (Italian and English), enclosure drawings and a web-based data viewer.</p>",
+  "keywords": [
+    "datalogger",
+    "Arduino",
+    "environmental monitoring",
+    "cave",
+    "speleology",
+    "air tracing",
+    "gas sensor",
+    "MQ-2",
+    "weather station",
+    "VOC",
+    "air quality",
+    "open hardware"
+  ],
+  "notes": "Licensed under the GNU General Public License v3.0 with the Commons Clause License Condition v1.0 (the Software may not be sold). See the LICENSE file in the repository. Project website: https://techmakers.eu/",
+  "related_identifiers": [
+    {
+      "identifier": "https://techmakers.eu/",
+      "relation": "isDescribedBy",
+      "resource_type": "publication-other"
+    }
+  ]
+}

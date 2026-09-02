@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata from this file."
+type: software
+title: "FluxyLogger: open-source modular Arduino datalogger for environmental monitoring and cave air tracing"
+abstract: >-
+  FluxyLogger is an open-source modular datalogger platform based on Arduino UNO
+  for environmental monitoring, originally developed for cave air tracing studies.
+  The firmware supports the NASO (MQ-2 gas sensor), NASO+LCD, METEO (BMP280 and
+  anemometer) and VOC (SGP40/SGP30) configurations, logging CSV data on a microSD
+  card with RTC timestamps.
+authors:
+  - family-names: Vernassa
+    given-names: Alessandro
+    email: speleoalex@gmail.com
+repository-code: "https://github.com/speleoalex/fluxylogger"
+url: "https://techmakers.eu/"
+license-url: "https://github.com/speleoalex/fluxylogger/blob/main/LICENSE"
+keywords:
+  - datalogger
+  - Arduino
+  - environmental monitoring
+  - cave
+  - speleology
+  - air tracing
+  - gas sensor
+  - weather station
+  - VOC
+  - open hardware
+version: "2.46"
+date-released: "2026-09-02"
