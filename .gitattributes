@@ -1,0 +1,33 @@
+# ---------------------------------------------------------------------------
+# GitHub Linguist configuration
+# The main deliverable of this repository is the Arduino/C++ firmware.
+# Everything else (web viewers, docs, example data, IDE project files)
+# is excluded from the language statistics.
+# ---------------------------------------------------------------------------
+
+# Arduino sketches are C++
+*.ino  linguist-language=C++
+*.h    linguist-language=C++
+
+# Firmware is always counted
+FluxyLogger/**              linguist-detectable=true
+
+# Web viewer applications (bundled third-party libs, HTML tooling)
+LoggerViewer_Web/**         linguist-detectable=false
+LoggerViewer_Web_Legacy/**  linguist-detectable=false
+
+# Experiments / test sketches
+tests/**                    linguist-detectable=false
+Datalogger_TestMinimal/**   linguist-detectable=false
+
+# Documentation and manuals
+doc/**                      linguist-documentation
+manuals/**                  linguist-documentation
+*.md                        linguist-documentation
+
+# Data, drawings and IDE metadata
+example_logs/**             linguist-detectable=false
+drawings/**                 linguist-detectable=false
+media/**                    linguist-detectable=false
+nbproject/**                linguist-generated=true
+.vscode/**                  linguist-generated=true
