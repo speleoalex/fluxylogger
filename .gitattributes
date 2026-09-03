@@ -1,8 +1,8 @@
 # ---------------------------------------------------------------------------
 # GitHub Linguist configuration
-# The main deliverable of this repository is the Arduino/C++ firmware.
-# Everything else (web viewers, docs, example data, IDE project files)
-# is excluded from the language statistics.
+# The language statistics cover the code actually developed here: the
+# Arduino/C++ firmware and the HTML/JS web viewer. Documentation, example
+# data, drawings, legacy/test code and IDE metadata are excluded.
 # ---------------------------------------------------------------------------
 
 # Arduino sketches are C++
@@ -12,9 +12,11 @@
 # Firmware is always counted
 FluxyLogger/**              linguist-detectable=true
 
-# Web viewer applications (bundled third-party libs, HTML tooling)
-LoggerViewer_Web/**         linguist-detectable=false
-LoggerViewer_Web_Legacy/**  linguist-detectable=false
+# Web viewer application: part of the project, counted as HTML/JS.
+# The bundled loggerviewer.js embeds a minified Chart.js copy, so it is
+# marked as vendored and kept out of the statistics.
+LoggerViewer_Web/loggerviewer.js  linguist-vendored
+LoggerViewer_Web_Legacy/**        linguist-detectable=false
 
 # Experiments / test sketches
 tests/**                    linguist-detectable=false
