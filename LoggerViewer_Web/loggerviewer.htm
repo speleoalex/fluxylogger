@@ -356,6 +356,73 @@
             color: var(--primary-color);
         }
 
+        .btn-info-help {
+            background: none;
+            border: 1px solid var(--secondary-color);
+            color: var(--secondary-color);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            padding: 0;
+            font-size: 0.75rem;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+            flex-shrink: 0;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .btn-info-help:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.visible {
+            display: flex;
+        }
+        .modal-box {
+            background: #fff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        .modal-box h4 {
+            margin: 0 0 1rem;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+        .modal-box p {
+            margin: 0 0 0.7rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--text-color);
+        }
+        .modal-box .modal-close {
+            position: absolute;
+            top: 0.6rem;
+            right: 0.8rem;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--secondary-color);
+            padding: 0;
+        }
+        .modal-box .modal-close:hover {
+            color: var(--text-color);
+        }
+
         #toggleSidebarBtn {
             background: none;
             border: none;
@@ -429,7 +496,10 @@
 
                 <div id="controlsWrapper" class="hidden">
                     <section class="control-section">
-                        <h3 data-i18n="auto">Sensor Calibration</h3>
+                        <h3 style="display:flex;align-items:center;justify-content:space-between;">
+                            <span data-i18n="auto">Sensor Calibration</span>
+                            <button class="btn-info-help" onclick="showAdcPpmHelp()" data-i18n-title="auto" title="ADC vs PPM info">?</button>
+                        </h3>
                         <div class="form-group">
                             <label for="startfrom" data-i18n="auto">Starting Row</label>
                             <input value="1" min="1" id="startfrom" onchange="updateChartWithZerogas();" type="number">
@@ -508,6 +578,10 @@
                                 <input value="0" id="airFlowRate" onchange="updateButaneCalculations();" type="number" min="0" max="10000" step="0.1">
                             </div>
                             <div class="form-group">
+                                <label for="backgroundPPM" data-i18n="auto">Clean-air PPM (from chart)</label>
+                                <input value="0" id="backgroundPPM" onchange="updateButaneCalculations();" type="number" min="0" step="1">
+                            </div>
+                            <div class="form-group">
                                 <label data-i18n="auto">Recording Duration</label>
                                 <span id="recordingDuration" class="value-display">--</span>
                             </div>
@@ -536,6 +610,16 @@
                 <a href="https://www.paypal.com/donate/?business=TKQWLKGENEP7L&no_recurring=0&item_name=Progetto+FluxyLogger+NASO&currency_code=EUR" target="_blank" class="donate-link" data-i18n="auto">Donate</a>
             </footer>
         </aside>
+
+        <div id="adcPpmModal" class="modal-overlay" onclick="if(event.target===this)hideAdcPpmHelp()">
+            <div class="modal-box">
+                <button class="modal-close" onclick="hideAdcPpmHelp()">&#x2715;</button>
+                <h4 id="adcPpmModalTitle"></h4>
+                <p id="adcPpmModalBody1"></p>
+                <p id="adcPpmModalBody2"></p>
+                <p id="adcPpmModalBody3"></p>
+            </div>
+        </div>
 
         <main class="main-content">
             <div id="chart-container">
@@ -734,11 +818,15 @@
             var temperature = parseFloat(document.getElementById('temperatureInput').value) || 10;
             var rawZeroGas = parseFloat(document.getElementById("zerogasInput").value) || 0;
 
-            // Calculate baseline PPM from ZeroGas ADC value
+            // Calculate baseline PPM from ZeroGas ADC value.
+            // If user also specified an observed clean-air PPM (backgroundPPM), use the
+            // higher of the two: the observed value already includes the formula baseline.
             var baselinePPM = 0;
             if (rawZeroGas > 0) {
                 baselinePPM = MQ2_RawToPPM(rawZeroGas, rawZeroGas);
             }
+            var backgroundPPM = parseFloat(document.getElementById('backgroundPPM').value) || 0;
+            baselinePPM = Math.max(baselinePPM, backgroundPPM);
 
             // Find LPG PPM dataset
             var ppmDataset = null;
@@ -793,16 +881,25 @@
             };
         }
 
+        // Returns the effective baseline PPM (same logic as calculateTotalButaneMass)
+        function getEffectiveBaselinePPM() {
+            var rawZeroGas = parseFloat(document.getElementById("zerogasInput").value) || 0;
+            var formulaBaseline = rawZeroGas > 0 ? MQ2_RawToPPM(rawZeroGas, rawZeroGas) : 0;
+            var userBackground = parseFloat(document.getElementById('backgroundPPM').value) || 0;
+            return Math.max(formulaBaseline, userBackground);
+        }
+
         // Function to update butane calculations in UI
         function updateButaneCalculations() {
             var airFlowRate = parseFloat(document.getElementById('airFlowRate').value) || 0;
             var temperature = parseFloat(document.getElementById('temperatureInput').value) || 10;
 
-            // Calculate average PPM from data
+            // Calculate average PPM from data, then display the net value (baseline subtracted)
             var avgPPM = calculateAveragePPM();
 
             if (avgPPM !== null && avgPPM > 0) {
-                document.getElementById('avgPPM').textContent = avgPPM.toFixed(1);
+                var netAvgPPM = Math.max(0, avgPPM - getEffectiveBaselinePPM());
+                document.getElementById('avgPPM').textContent = netAvgPPM.toFixed(1);
 
                 if (airFlowRate > 0) {
                     // Calculate total mass over recording period
@@ -2328,6 +2425,7 @@
             "compensation factor": "Fattore Compensazione",
             "air flow analysis": "Analisi Flusso d'Aria",
             "air flow rate (m³/min)": "Portata Aria (m³/min)",
+            "air background ppm": "PPM in Aria Pulita (da grafico)",
             "recording duration": "Durata Registrazione",
             "average ppm": "Media PPM",
             "total butane (kg)": "Butano Totale (kg)",
@@ -2351,7 +2449,20 @@
             "no data to display": "Nessun dato da visualizzare",
             "to start, open a csv file using the panel on the left.": "Per iniziare, apri un file CSV utilizzando il pannello a sinistra.",
             "total duration": "Durata totale",
-            "samples": "campioni"
+            "samples": "campioni",
+            "adc vs ppm info": "Informazioni ADC e PPM",
+            "adc vs ppm title": "Cos'è ADC e cos'è PPM?",
+            "adc vs ppm body1": "ADC (Analog-to-Digital Converter) è il valore grezzo letto dal sensore MQ-2: un numero tra 0 e 1023 che rappresenta la tensione analogica in uscita dal sensore. Questo valore varia con la concentrazione di gas ma dipende anche dalla calibrazione e dalle condizioni ambientali.",
+            "adc vs ppm body2": "PPM (Parts Per Million) è la concentrazione del gas espressa in parti per milione. Il valore ADC viene convertito in PPM tramite una formula matematica che usa la curva di risposta del sensore e il valore ZeroGas (ADC in aria pulita). Un PPM più alto significa una concentrazione di gas più elevata.",
+            "adc vs ppm body3": "Per ottenere valori PPM accurati, imposta il campo 'ZeroGas ADC' con il valore ADC misurato in aria pulita e assenza di gas tracciante. Puoi usare il pulsante 'Auto' per rilevarlo automaticamente dall'inizio del file."
+        };
+
+        __language['en'] = {
+            "air background ppm": "Clean-air PPM (from chart)",
+            "adc vs ppm title": "What is ADC and what is PPM?",
+            "adc vs ppm body1": "ADC (Analog-to-Digital Converter) is the raw value read by the MQ-2 sensor: a number between 0 and 1023 representing the analog voltage output. This value changes with gas concentration but also depends on calibration and environmental conditions.",
+            "adc vs ppm body2": "PPM (Parts Per Million) is the gas concentration expressed in parts per million. The ADC value is converted to PPM using a mathematical formula based on the sensor's response curve and the ZeroGas value (ADC in clean air). A higher PPM means a higher gas concentration.",
+            "adc vs ppm body3": "To get accurate PPM readings, set the 'ZeroGas ADC' field to the ADC value measured in clean air with no tracer gas present. Use the 'Auto' button to detect it automatically from the beginning of the file."
         };
 
         function getParam(name) {
@@ -2444,6 +2555,18 @@
             document.querySelectorAll("option[data-i18n='auto']").forEach(function (element) {
                 element.textContent = _i18n(element.textContent, "auto");
             });
+        }
+
+        function showAdcPpmHelp() {
+            document.getElementById('adcPpmModalTitle').textContent = _i18n('adc vs ppm title');
+            document.getElementById('adcPpmModalBody1').textContent = _i18n('adc vs ppm body1');
+            document.getElementById('adcPpmModalBody2').textContent = _i18n('adc vs ppm body2');
+            document.getElementById('adcPpmModalBody3').textContent = _i18n('adc vs ppm body3');
+            document.getElementById('adcPpmModal').classList.add('visible');
+        }
+
+        function hideAdcPpmHelp() {
+            document.getElementById('adcPpmModal').classList.remove('visible');
         }
 
         // Initialize internationalization
