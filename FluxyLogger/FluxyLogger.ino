@@ -12,12 +12,12 @@
   NOTE:
   Datalogger use 6 pin. Analog 4 and 5 for I2C.
   SD card use i digital pin 13, 12, 11, and 10.
-  0=seriale rx
-  1=seriale tx
+  0=serial rx
+  1=serial tx
 
 */
 
-#define VERSION 2.46
+#define VERSION 2.47
 
 #define BOUDRATE 19200  // 9600,57600,19200,115200
 // Sensor presence configuration
@@ -75,7 +75,7 @@
 #define USE_LONG_FILE_NAMES 0
 #define USE_UTF8_LONG_NAMES 0
 #define SDFAT_FILE_TYPE 1
-#define CHECK_FLASH_PROGRAMMING 1  // May cause SD to sleep at high current.
+#define CHECK_FLASH_PROGRAMMING 0  // May cause SD to sleep at high current.
 
 #include <SdFatConfig.h>
 #include <SdFat.h>
@@ -770,41 +770,63 @@ long DL_readVcc() {
 }
 #endif
 
-/**
+// Write a 2-digit zero-padded value (replaces sprintf)
+static void put2(char *p, uint8_t v) {
+  p[0] = '0' + (v / 10) % 10;
+  p[1] = '0' + v % 10;
+}
 
+// Write a 4-digit year (replaces sprintf)
+static void put4year(char *p, uint16_t y) {
+  p[0] = '0' + (y / 1000) % 10;
+  p[1] = '0' + (y / 100) % 10;
+  p[2] = '0' + (y / 10) % 10;
+  p[3] = '0' + y % 10;
+}
+
+/**
+  Current date/time as "YYYY-MM-DD HH:mm:ss"
 */
 static char *DL_strNow(void) {
   if (rtcPresent) {
-    // DateTime now;
     now = RTC.now();
-    sprintf(strDate, "%4d-%2d-%2d_%2d:%2d:%2d", now.year(), now.month(),
-            now.day(), now.hour(), now.minute(), now.second());
-    for (unsigned int i = 0; i < strlen(strDate) && i < 18; i++) {
-      if (strDate[i] == ' ') {
-        strDate[i] = '0';
-      } else {
-        if (strDate[i] == '_') {
-          strDate[i] = ' ';
-        }
-      }
-    }
+    put4year(strDate, now.year());
+    strDate[4] = '-';
+    put2(strDate + 5, now.month());
+    strDate[7] = '-';
+    put2(strDate + 8, now.day());
+    strDate[10] = ' ';
+    put2(strDate + 11, now.hour());
+    strDate[13] = ':';
+    put2(strDate + 14, now.minute());
+    strDate[16] = ':';
+    put2(strDate + 17, now.second());
+    strDate[19] = '\0';
   }
   return strDate;
 }
 
 /**
-
+  Current date/time as filename "YYYY-MM-DD_HH.mm.ss.txt"
 */
 static char *DL_strDateToFilename(void) {
-  //  DateTime now;
   now = RTC.now();
-  sprintf(strFileDate, "%4d-%2d-%2d_%2d.%2d.%2d.txt", now.year(), now.month(),
-          now.day(), now.hour(), now.minute(), now.second());
-  for (unsigned int i = 0; i < strlen(strFileDate) && i < 18; i++) {
-    if (strFileDate[i] == ' ') {
-      strFileDate[i] = '0';
-    }
-  }
+  put4year(strFileDate, now.year());
+  strFileDate[4] = '-';
+  put2(strFileDate + 5, now.month());
+  strFileDate[7] = '-';
+  put2(strFileDate + 8, now.day());
+  strFileDate[10] = '_';
+  put2(strFileDate + 11, now.hour());
+  strFileDate[13] = '.';
+  put2(strFileDate + 14, now.minute());
+  strFileDate[16] = '.';
+  put2(strFileDate + 17, now.second());
+  strFileDate[19] = '.';
+  strFileDate[20] = 't';
+  strFileDate[21] = 'x';
+  strFileDate[22] = 't';
+  strFileDate[23] = '\0';
   return strFileDate;
 }
 
@@ -832,7 +854,7 @@ void DL_openLogFile() {
     char filename[] = "xxxx-xx-xx-xx.xx.xx.txt";
 
     for (uint8_t i = 0; i < 9; i++) {
-      sprintf(filename, DL_strDateToFilename());
+      strcpy(filename, DL_strDateToFilename());
       if (!SD.exists(filename)) {
         // only open a new file if it doesn't exist
         logfile = SD.open(filename, FILE_WRITE);
@@ -949,7 +971,7 @@ int CONF_getConfValueInt(char *filename, char *key, int defaultValue = 0) {
     description[0] = '\0';
     value[0] = '\0';
     character = myFile.read();
-    // cerca una linea valida----->
+    // look for a valid line----->
     if (!CONF_is_valid_char(character)) {
       // Comment - ignore this line
       while (character != '\n' && myFile.available()) {
@@ -957,8 +979,8 @@ int CONF_getConfValueInt(char *filename, char *key, int defaultValue = 0) {
       };
       continue;
     }
-    // cerca una linea valida-----<
-    //----riempo la descrizione---->
+    // look for a valid line-----<
+    //----fill the key name---->
     do {
       // SerialPrintln(character);
       if (i >= MAX_INI_KEY_LENGTH - 2) {
@@ -974,8 +996,8 @@ int CONF_getConfValueInt(char *filename, char *key, int defaultValue = 0) {
     } while (CONF_is_valid_char(character));
     description[i] = '\0';
     // SerialPrintln(description);
-    //----riempo la descrizione----<
-    //-------elimino gli spazi------->
+    //----fill the key name----<
+    //-------strip spaces------->
     if (character == ' ') {
       do {
         character = myFile.read();
@@ -985,10 +1007,10 @@ int CONF_getConfValueInt(char *filename, char *key, int defaultValue = 0) {
         }
       } while (character == ' ');
     }
-    //-------elimino gli spazi-------<
+    //-------strip spaces-------<
     if (character == '=') {
       if (strcmp(description, key) == 0) {
-        //-------elimino gli spazi------->
+        //-------strip spaces------->
         do {
           character = myFile.read();
           if (!myFile.available()) {
@@ -996,7 +1018,7 @@ int CONF_getConfValueInt(char *filename, char *key, int defaultValue = 0) {
             return defaultValue;
           }
         } while (character == ' ');
-        //-------elimino gli spazi-------<
+        //-------strip spaces-------<
         i = 0;
         value[0] = '\0';
         valid = true;
@@ -1201,17 +1223,16 @@ void execute_command(char *command) {
   if (strcmp(command, "?") == 0) {
     SerialPrintln();
     SerialPrintln(F("commands:"));
-    SerialPrintln(F("v:firmware version"));
-    SerialPrintln(F("logs:read data"));
-    SerialPrintln(F("date:display device clock"));
-    SerialPrintln(F("reset:reset device"));
-    SerialPrintln(F("settime:set device clock"));
-    SerialPrintln(F("setconfig:set config"));
-    // SerialPrintln(F("echo start/stop: start/stop display values"));
-    // SerialPrintln(F("log start/stop: start/stop log"));
-    SerialPrintln(F("plotter start/stop: start/stop plotter mode"));
+    SerialPrintln(F("v"));
+    SerialPrintln(F("ls"));
+    SerialPrintln(F("logs"));
+    SerialPrintln(F("date"));
+    SerialPrintln(F("reset"));
+    SerialPrintln(F("settime"));
+    SerialPrintln(F("setconfig"));
+    SerialPrintln(F("plotter start/stop"));
 #if MQ2SENSOR_PRESENT
-    SerialPrintln(F("autocalib:auto calibration"));
+    SerialPrintln(F("autocalib"));
 #endif
     SerialPrintln();
 
@@ -1420,7 +1441,7 @@ void SetDateTime() {
   reset();
 }
 
-// Funzione di reset personalizzata
+// Custom reset function
 void reset() {
 #ifdef ARDUINO_AVR_UNO
   asm volatile("  jmp 0");
@@ -1453,21 +1474,21 @@ void manageBlinking(unsigned long timeOn, unsigned long timeOff) {
   static bool ledState = false;
   static unsigned long previousMillis = 0;
   if (timeOn <= 0 && timeOff <= 0) {
-    // Se entrambi i tempi sono 0, spegni il LED e esci dalla funzione
+    // If both times are 0, turn off the LED and return
     digitalWrite(LED_2, LOW);
     return;
   }
-  // Ottieni il tempo attuale
+  // Get the current time
   currentMillis = millis();
   if (ledState) {
-    // Se il LED è acceso, controlla se è ora di spegnerlo
+    // If the LED is on, check whether it is time to turn it off
     if (currentMillis - previousMillis >= timeOn) {
       ledState = false;
       previousMillis = currentMillis;
       digitalWrite(LED_2, LOW);
     }
   } else {
-    // Se il LED è spento, controlla se è ora di accenderlo
+    // If the LED is off, check whether it is time to turn it on
     if (currentMillis - previousMillis >= timeOff) {
       ledState = true;
       previousMillis = currentMillis;
@@ -1487,7 +1508,7 @@ void printDateTime() {
 // manages the flashing time depending on the ppm
 void manageBlinkingByPPM(float inputValue) {
   uint16_t MaxValue = 500;
-  // Assicurati che il valore di input sia entro i limiti previsti
+  // Make sure the input value is within the expected range
   if (inputValue > MaxValue || inputValue < 0) {
     inputValue = MaxValue;
   }
@@ -1497,7 +1518,7 @@ void manageBlinkingByPPM(float inputValue) {
     return;
   }
   unsigned long time = map(inputValue, 1, MaxValue, 2000, 100);
-  // Calcola timeOn e timeOff come metà del tempo totale del ciclo
+  // Compute timeOn and timeOff as half of the total cycle time
   unsigned long timeOn = time / 2;
   unsigned long timeOff = time / 2;
   manageBlinking(timeOn, timeOff);

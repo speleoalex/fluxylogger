@@ -127,7 +127,7 @@ Citation metadata is also available in [CITATION.cff](CITATION.cff) (use the "Ci
 - **License**: GNU General Public License v3.0 + [Commons Clause](https://commonsclause.com/) (see [LICENSE](LICENSE))
 - **Author**: Alessandro Vernassa (speleoalex@gmail.com)
 - **Website**: <https://www.sparkilla.com/ecommerce_fluxylogger/>
-- **Firmware Version**: 2.46
+- **Firmware Version**: 2.47
 - **DOI**: [10.5281/zenodo.22255817](https://doi.org/10.5281/zenodo.22255817)
 - **Started**: 2020
 
